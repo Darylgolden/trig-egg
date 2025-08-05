@@ -14,5 +14,10 @@ maxSynthPendingDepth = 3
 name = "mathlib"
 scope = "leanprover-community"
 
+[[require]]
+name = "egg"
+git  = "https://github.com/marcusrossel/lean-egg"
+rev  = "main"
+
 [[lean_lib]]
 name = "TrigEgg"
