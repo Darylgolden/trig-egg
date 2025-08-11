@@ -149,16 +149,41 @@ attribute [egg frac_add]
   Mathlib.Meta.NormNum.IsRat.to_isInt
   Mathlib.Meta.NormNum.IsInt.to_isNat
   Mathlib.Meta.NormNum.isNat_eq_true
+  Int.ofNat
   Eq.refl
   HAdd.hAdd
   HMul.hMul
+  instNatCastInt
 
-
--- Now try a reproduction (may leave (3+3) instead of 6 unless you add numeral-specific rewrites)
 set_option trace.egg.rewrites true
 set_option egg.timeLimit 5
 example : (1 : ℚ) / 2 + 1 / 2 = 1 := by
-  egg +trig_rules [Nat.cast_add, Mathlib.Meta.NormNum.isNat_ofNat ℚ]
+  -- egg +trig_rules [Nat.cast_add, Int.cast_add, Rat.cast_add, Mathlib.Meta.NormNum.isNat_ofNat ℚ]
   -- egg +frac_add [Nat.cast_add, Mathlib.Meta.NormNum.isNat_ofNat ℚ]
   -- add cast lemmas
-  -- calcify norm_num
+  grind only
+  -- calc
+  --     1 / 2 + 1 / 2
+  --     _ = 1 :=
+  --       Mathlib.Meta.NormNum.isNat_eq_true
+  --         (Mathlib.Meta.NormNum.IsInt.to_isNat
+  --           (Mathlib.Meta.NormNum.IsRat.to_isInt
+  --             (Mathlib.Meta.NormNum.isRat_add (Eq.refl HAdd.hAdd)
+  --               (Mathlib.Meta.NormNum.isRat_div
+  --                 (Mathlib.Meta.NormNum.isRat_mul (Eq.refl HMul.hMul)
+  --                   (Mathlib.Meta.NormNum.IsNat.to_isRat
+  --                     (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 1)))
+  --                   (Mathlib.Meta.NormNum.isRat_inv_pos
+  --                     (Mathlib.Meta.NormNum.IsNat.to_isRat
+  --                       (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 2))))
+  --                   (Eq.refl ((Int.ofNat 1).mul (Int.ofNat 1))) (Eq.refl 2)))
+  --               (Mathlib.Meta.NormNum.isRat_div
+  --                 (Mathlib.Meta.NormNum.isRat_mul (Eq.refl HMul.hMul)
+  --                   (Mathlib.Meta.NormNum.IsNat.to_isRat
+  --                     (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 1)))
+  --                   (Mathlib.Meta.NormNum.isRat_inv_pos
+  --                     (Mathlib.Meta.NormNum.IsNat.to_isRat
+  --                       (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 2))))
+  --                   (Eq.refl ((Int.ofNat 1).mul (Int.ofNat 1))) (Eq.refl 2)))
+  --               (Eq.refl (Int.ofNat 4)) (Eq.refl 4))))
+  --         (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 1))
