@@ -20,6 +20,7 @@ attribute [egg trig_rules]
             _root_.div_mul_div_comm div_mul_eq_div_mul_one_div
 /- + -   -/ sub_sub sub_add add_sub add_comm_sub sub_add_cancel sub_add_eq_add_sub add_sub_assoc
 /- + * / -/ left_distrib right_distrib add_div_eq_mul_add_div
+            -- mul_div_right_comm
 -- taken from lean-egg egg real basket
   -- todo: to add simp lemmas
 
@@ -46,7 +47,7 @@ attribute [egg trig_rules]
   -- Real.two_mul_sin_mul_sin
 
   -- TR9
-  Real.sin_add_sin -- why isn't this imported???
+  Real.sin_add_sin
   Real.sin_sub_sin
   Real.cos_add_cos
   Real.cos_sub_cos
@@ -150,12 +151,26 @@ example (a b c d : ℝ) : a * b + a * c + d * b + d * c = (a + d) * (b + c) :=
 example : 2503 + 1023 = 3526 :=
   by egg
 
-example : Real.sin ((2 : ℕ) + (1 : ℕ)) = Real.sin ((3 : ℕ)) :=
+set_option trace.egg.explanation.steps true
+example : (15 + 15) * 2 = 60 :=
+  by egg
+
+example : Real.sin ((1 : ℕ) + (2 : ℕ)) = Real.sin ((3 : ℕ)) :=
   by egg +trig_rules [Nat.cast_add]
 
-set_option trace.egg.explanation.steps true
+example : Real.sin ((20 : ℕ) + (20 : ℕ)) = Real.sin ((40 : ℕ)) :=
+  by egg +trig_rules [Nat.cast_add]
+
+
+set_option egg.explLengthLimit 300
+set_option egg.timeLimit 20
 example : Real.sin (2) * Real.cos (1) + Real.cos (2) * Real.sin (1) =
  Real.sin (3) :=
+  -- by egg +trig_rules
+  by egg +trig_rules [Nat.cast_add, Semiring.toGrindSemiring_ofNat ℝ]
+
+example : Real.sin (2 : ℕ) * Real.cos (1 : ℕ) + Real.cos (2 : ℕ) * Real.sin (1 : ℕ) =
+ Real.sin (3 : ℕ) :=
   -- by egg +trig_rules
   by egg +trig_rules [Nat.cast_add, Semiring.toGrindSemiring_ofNat ℝ]
 
@@ -172,9 +187,10 @@ lemma TR2i_test_1 : Real.sin x / Real.cos x = Real.tan x :=
 
 set_option trace.egg.rewrites true
 lemma TR2i_test_2 : Real.sin (x) * Real.sin (y) / Real.cos (x) = Real.tan (x) * Real.sin (y) :=
-  by calc
-  _ = (Real.sin (x) / Real.cos (x)) * Real.sin (y) := by calcify ring
-  _ = Real.tan (x) * Real.sin (y) := by egg +trig_rules
+  by egg +trig_rules [mul_div_right_comm]
+  -- by calc
+  -- _ = (Real.sin (x) / Real.cos (x)) * Real.sin (y) := by calcify ring
+  -- _ = Real.tan (x) * Real.sin (y) := by egg +trig_rules
 
 example (n : Nat) : OfNat.ofNat (α := Real) n = (↑n : Real) := by
 egg [Semiring.toGrindSemiring_ofNat]
@@ -233,3 +249,5 @@ example : (1 : ℚ) / 2 + 1 / 2 = 1 := by
 
 example : (1 : ℚ) / 2 + 1 / 2 = 1 :=
   by norm_num
+
+
