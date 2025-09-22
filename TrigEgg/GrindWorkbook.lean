@@ -165,9 +165,10 @@ example : cos 2 * cos 3 + sin 2 * (cos 1 * sin 2 + cos 2 * sin 1) = cos 1 := by 
 example : (cos 2 * cos 3 + sin 2 * (cos 1 * sin 2 + cos 2 * sin 1)) * cos 5 + sin 1 * sin 5 = cos 4 := by grind -- FAIL
 
 example : Real.sqrt 2 * cos x * x + Real.sqrt 6 * sin x * x = 2 * Real.sqrt 2 * x * sin (x + Real.pi / 6) := by grind -- FAIL
-example : cos x / Real.sqrt 6 + sin x / Real.sqrt 2 + cos x / Real.sqrt 6 / 3 + sin x / Real.sqrt 2 / 3 = 4 * Real.sqrt 6 * sin (x + Real.pi / 6) / 9 := by grind
-example : cos x / Real.sqrt 6 + sin x / Real.sqrt 2 + cos y / Real.sqrt 6 / 3 + sin y / Real.sqrt 2 / 3 = Real.sqrt 6 * sin (x + Real.pi / 6) / 3 + Real.sqrt 6 * sin (y + Real.pi / 6) / 9 := by grind
-example : cos x + Real.sqrt 3 * sin x + 2 * Real.sqrt 3 * cos (x + Real.pi / 6) = 4 * cos x := by grind
-example : cos x + Real.sqrt 3 * sin x + 2 * Real.sqrt 3 * cos (x + Real.pi / 6) + 4 * sin x = 4 * Real.sqrt 2 * sin (x + Real.pi / 4) := by grind
+example : cos x / Real.sqrt 6 + sin x / Real.sqrt 2 + cos x / Real.sqrt 6 / 3 + sin x / Real.sqrt 2 / 3 = 4 * Real.sqrt 6 * sin (x + Real.pi / 6) / 9 := by grind -- FAIL
+example : cos x / Real.sqrt 6 + sin x / Real.sqrt 2 + cos y / Real.sqrt 6 / 3 + sin y / Real.sqrt 2 / 3 = Real.sqrt 6 * sin (x + Real.pi / 6) / 3 + Real.sqrt 6 * sin (y + Real.pi / 6) / 9 := by grind -- FAIL
+example : cos x + Real.sqrt 3 * sin x + 2 * Real.sqrt 3 * cos (x + Real.pi / 6)
+= 4 * cos x := by grind
+example : cos x + Real.sqrt 3 * sin x + 2 * Real.sqrt 3 * cos (x + Real.pi / 6) + 4 * sin x = 4 * Real.sqrt 2 * sin (x + Real.pi / 4) := by grind -- FAIL
 
 example : cos 2 * sin 3 + sin 2 * cos 4 = sin 2 * cos 4 + sin 3 * cos 2 := by grind
